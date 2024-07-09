@@ -6,6 +6,7 @@ from surya.model.ordering.encoder import VariableDonutSwinModel
 from surya.model.ordering.encoderdecoder import OrderVisionEncoderDecoderModel
 from surya.model.ordering.processor import OrderImageProcessor
 from surya.settings import settings
+import torch_directml
 
 
 def load_model(checkpoint=settings.ORDER_MODEL_CHECKPOINT, device=settings.TORCH_DEVICE_MODEL, dtype=settings.MODEL_DTYPE):
@@ -28,6 +29,7 @@ def load_model(checkpoint=settings.ORDER_MODEL_CHECKPOINT, device=settings.TORCH
     assert isinstance(model.decoder, MBartOrder)
     assert isinstance(model.encoder, VariableDonutSwinModel)
 
+    device = torch_directml.device()
     model = model.to(device)
     model = model.eval()
     print(f"Loaded reading order model {checkpoint} on device {device} with dtype {dtype}")

@@ -13,6 +13,7 @@ from surya.model.recognition.config import MBartMoEConfig, VariableDonutSwinConf
 from surya.model.recognition.encoder import VariableDonutSwinModel
 from surya.model.recognition.decoder import MBartMoE
 from surya.settings import settings
+import torch_directml
 
 
 def load_model(checkpoint=settings.RECOGNITION_MODEL_CHECKPOINT, device=settings.TORCH_DEVICE_MODEL, dtype=settings.MODEL_DTYPE, langs: Optional[List[int]] = None):
@@ -39,6 +40,7 @@ def load_model(checkpoint=settings.RECOGNITION_MODEL_CHECKPOINT, device=settings
     assert isinstance(model.decoder, MBartMoE)
     assert isinstance(model.encoder, VariableDonutSwinModel)
 
+    device = torch_directml.device()
     model = model.to(device)
     model = model.eval()
     print(f"Loaded recognition model {checkpoint} on device {device} with dtype {dtype}")
